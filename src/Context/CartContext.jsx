@@ -1,0 +1,106 @@
+import axios from "axios";
+import { createContext, useEffect, useState } from "react";
+
+export let CartContext = createContext(0)
+
+export default function CartContextProvider(props) {
+
+    const [cartId, setcartId] = useState(0)
+    const [totalPrice, settotalPrice] = useState(0)
+    const [products, setproducts] = useState(null)
+    const [numOfCartItems, setnumOfCartItems] = useState(0)
+
+    let headers = { token: localStorage.getItem("UserToken") }
+    let token = localStorage.getItem("UserToken")
+
+    function addToCart(prodId) {
+        return axios.post(`https://ecommerce.routemisr.com/api/v1/cart`, {
+            productId: prodId
+        }, {
+            headers
+        }).then((response) => {
+            getUserCartItems()
+            return response;
+        }).catch((error) => {
+            return error;
+        })
+    }
+
+    function getUserCartItems() {
+        axios.get(`https://ecommerce.routemisr.com/api/v1/cart`, {
+            headers
+        }).then((response) => {
+            setcartId(response?.data?.cartId)
+            settotalPrice(response?.data?.data?.totalCartPrice)
+            setproducts(response?.data?.data?.products)
+            setnumOfCartItems(response?.data?.numOfCartItems)
+            return response;
+        }).catch((error) => {
+            return error;
+        })
+    }
+
+    function updateCart(prodId, count) {
+        return axios.put(`https://ecommerce.routemisr.com/api/v1/cart/${prodId}`, {
+            count: count
+        }, {
+            headers
+        }).then((response) => {
+            setcartId(response?.data?.cartId)
+            settotalPrice(response?.data?.data?.totalCartPrice)
+            setproducts(response?.data?.data?.products)
+            setnumOfCartItems(response?.data?.numOfCartItems)
+            return response
+        }).catch((error) => {
+            console.log(error);
+            return error
+        })
+    }
+
+    function deleteCartItem(prodId) {
+        return axios.delete(`https://ecommerce.routemisr.com/api/v1/cart/${prodId}`, {
+            headers
+        }).then((response) => {
+            setcartId(response?.data?.cartId)
+            settotalPrice(response?.data?.data?.totalCartPrice)
+            setproducts(response?.data?.data?.products)
+            setnumOfCartItems(response?.data?.numOfCartItems)
+            return response
+        }).catch((error) => {
+            console.log(error);
+            return error
+        })
+    }
+
+    function deleteAllCart() {
+        return axios.delete(`https://ecommerce.routemisr.com/api/v1/cart/`, {
+            headers
+        }).then((response) => {
+            setcartId(response?.data?.cartId)
+            settotalPrice(response?.data?.data?.totalCartPrice)
+            setproducts(response?.data?.data?.products)
+            setnumOfCartItems(response?.data?.numOfCartItems)
+            return response
+        }).catch((error) => {
+            console.log(error);
+            return error
+        })
+    }
+
+    function resetCartAfterPayment() {
+        setcartId(0)
+        setnumOfCartItems(0)
+        settotalPrice(0)
+        setproducts(null)
+    }
+
+    useEffect(() => {
+        if (token) {
+            getUserCartItems()
+        }
+    }, [token])
+
+    return <CartContext.Provider value={{ resetCartAfterPayment, addToCart, numOfCartItems, products, totalPrice, cartId, getUserCartItems, updateCart, deleteCartItem, deleteAllCart }}>
+        {props.children}
+    </CartContext.Provider>
+}
