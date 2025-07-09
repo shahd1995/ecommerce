@@ -27,6 +27,8 @@ function App() {
     {
       path: '', element: <PageLayout />, children: [
         { index: true, element: <Home /> },
+        { path: '/ecommerce', element: <Home /> },
+        { path: '/home', element: <Home /> },
         { path: '/productslisting', element: <ProductsListing /> },
         { path: '/cart', element: <ProtectRoute><Cart /></ProtectRoute> },
         { path: '/login', element: <Login /> },
@@ -37,7 +39,7 @@ function App() {
         { path: '/categoriesListing', element: <CategoriesListing /> },
         { path: '/brands', element: <Brands /> },
         { path: '/forgetpassword', element: <ForgetPassword /> },
-         { path: '/checkout', element: <ProtectRoute><CheckOut /></ProtectRoute> },
+        { path: '/checkout', element: <ProtectRoute><CheckOut /></ProtectRoute> },
         { path: '/productdetails/:id/:categ', element: <ProductDetails /> },
         { path: '*', element: <NotFound /> },
       ]
@@ -49,9 +51,9 @@ function App() {
       <TokenContextProvider>
         <CartContextProvider>
           <WishContextProvider>
-          <RouterProvider router={route}>
-          </RouterProvider>
-          <Toaster />
+            <RouterProvider router={route}>
+            </RouterProvider>
+            <Toaster />
           </WishContextProvider>
         </CartContextProvider>
       </TokenContextProvider>
