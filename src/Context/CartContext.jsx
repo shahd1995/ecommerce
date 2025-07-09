@@ -17,7 +17,7 @@ export default function CartContextProvider(props) {
         return axios.post(`https://ecommerce.routemisr.com/api/v1/cart`, {
             productId: prodId
         }, {
-            headers
+            headers: { token: localStorage.getItem("UserToken") }
         }).then((response) => {
             getUserCartItems()
             return response;
@@ -28,7 +28,7 @@ export default function CartContextProvider(props) {
 
     function getUserCartItems() {
         axios.get(`https://ecommerce.routemisr.com/api/v1/cart`, {
-            headers
+            headers: { token: localStorage.getItem("UserToken") }
         }).then((response) => {
             setcartId(response?.data?.cartId)
             settotalPrice(response?.data?.data?.totalCartPrice)
@@ -44,7 +44,7 @@ export default function CartContextProvider(props) {
         return axios.put(`https://ecommerce.routemisr.com/api/v1/cart/${prodId}`, {
             count: count
         }, {
-            headers
+            headers: { token: localStorage.getItem("UserToken") }
         }).then((response) => {
             setcartId(response?.data?.cartId)
             settotalPrice(response?.data?.data?.totalCartPrice)
@@ -59,7 +59,7 @@ export default function CartContextProvider(props) {
 
     function deleteCartItem(prodId) {
         return axios.delete(`https://ecommerce.routemisr.com/api/v1/cart/${prodId}`, {
-            headers
+            headers: { token: localStorage.getItem("UserToken") }
         }).then((response) => {
             setcartId(response?.data?.cartId)
             settotalPrice(response?.data?.data?.totalCartPrice)
@@ -74,7 +74,7 @@ export default function CartContextProvider(props) {
 
     function deleteAllCart() {
         return axios.delete(`https://ecommerce.routemisr.com/api/v1/cart/`, {
-            headers
+            headers: { token: localStorage.getItem("UserToken") }
         }).then((response) => {
             setcartId(response?.data?.cartId)
             settotalPrice(response?.data?.data?.totalCartPrice)

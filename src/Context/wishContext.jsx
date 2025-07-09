@@ -17,7 +17,7 @@ export default function WishContextProvider(props) {
         return axios.post(`https://ecommerce.routemisr.com/api/v1/wishlist`, {
             productId: prodId
         }, {
-            headers
+            headers: { token: localStorage.getItem("UserToken") }
         }).then((response) => {
            getUserWishListItems()
             return response;
@@ -28,7 +28,7 @@ export default function WishContextProvider(props) {
 
     function getUserWishListItems() {
         axios.get(`https://ecommerce.routemisr.com/api/v1/wishlist`, {
-            headers
+            headers: { token: localStorage.getItem("UserToken") }
         }).then((response) => {
             setproducts(response?.data?.data)
             setnumOfItems(response?.data?.count)
@@ -45,7 +45,7 @@ export default function WishContextProvider(props) {
 
     function removeFromWishList(prodId) {
         return axios.delete(`https://ecommerce.routemisr.com/api/v1/wishlist/${prodId}`, {
-            headers
+            headers: { token: localStorage.getItem("UserToken") }
         }).then((response) => {
             getUserWishListItems()
             return response

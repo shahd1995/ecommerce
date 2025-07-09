@@ -16,7 +16,7 @@ export default function CheckOut() {
     axios.post(`https://ecommerce.routemisr.com/api/v1/orders/${cartId}`, {
       shippingAddress: val
     }, {
-      headers
+      headers: { token: localStorage.getItem("UserToken") }
     }).then((response) => {
       console.log(response);
       if (response.data.status === "success") {
@@ -33,7 +33,7 @@ export default function CheckOut() {
     axios.post(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:5173/`, {
       shippingAddress: val
     }, {
-      headers
+      headers: { token: localStorage.getItem("UserToken") }
     }).then((response) => {
       console.log(response);
       if (response.data.status === "success") {
