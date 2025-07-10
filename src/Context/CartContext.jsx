@@ -1,17 +1,15 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { TokenContext } from "./TokenContext";
 
 export let CartContext = createContext(0)
-
 export default function CartContextProvider(props) {
 
     const [cartId, setcartId] = useState(0)
     const [totalPrice, settotalPrice] = useState(0)
     const [products, setproducts] = useState(null)
     const [numOfCartItems, setnumOfCartItems] = useState(0)
-
-    let headers = { token: localStorage.getItem("UserToken") }
-    let token = localStorage.getItem("UserToken")
+    let {UserToken, setUserToken} = useContext(TokenContext)
 
     function addToCart(prodId) {
         return axios.post(`https://ecommerce.routemisr.com/api/v1/cart`, {
@@ -28,7 +26,7 @@ export default function CartContextProvider(props) {
 
     function getUserCartItems() {
         axios.get(`https://ecommerce.routemisr.com/api/v1/cart`, {
-            headers: { token: localStorage.getItem("UserToken") }
+            headers: { token: UserToken }
         }).then((response) => {
             setcartId(response?.data?.cartId)
             settotalPrice(response?.data?.data?.totalCartPrice)
@@ -95,10 +93,11 @@ export default function CartContextProvider(props) {
     }
 
     useEffect(() => {
-        if (token) {
+        if (UserToken) {
             getUserCartItems()
+            console.log(UserToken)
         }
-    }, [token])
+    }, [UserToken])
 
     return <CartContext.Provider value={{ resetCartAfterPayment, addToCart, numOfCartItems, products, totalPrice, cartId, getUserCartItems, updateCart, deleteCartItem, deleteAllCart }}>
         {props.children}

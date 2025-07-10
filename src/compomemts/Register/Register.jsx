@@ -22,17 +22,18 @@ export default function Register() {
       setUserToken(data.token)
       setIsLoading(false)
     }).catch((error)=>{
-      console.log(error);
+      console.log(error.response);
       
       seterrorMsg(error.response.data.message)
       setIsLoading(false)
     })
   }
+  
 
   let validationSchema = Yup.object().shape({
-    name:Yup.string().required('This field is required'),
+    name:Yup.string().required('This field is required').matches(/^.{3,6}$/, "Must be atleast 3 characters and maximum 6"),
     email:Yup.string().email('Invalid email').required("This field is required"),
-    password:Yup.string().required('This field is required').matches(/^[A-Z][a-z0-9]{4,10}$/, "Invalid Password"),
+    password:Yup.string().required('This field is required').matches(/^[A-Z0-9][a-z0-9]{6,10}$/, "Didn`t accept characters, should contain only 1 capital letter, Min 6 & Max 10 characters"),
     rePassword:Yup.string().required('This field is required').oneOf([Yup.ref('password')], 'Must match password'),
     phone:Yup.string().required('This field is required').matches(/^01[0125][0-9]{8}$/, 'Invalid phone number')
   })

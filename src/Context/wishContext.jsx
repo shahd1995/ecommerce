@@ -1,5 +1,6 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { TokenContext } from "./TokenContext";
 
 export let WishContext = createContext(0)
 
@@ -11,6 +12,7 @@ export default function WishContextProvider(props) {
     const [products, setproducts] = useState(null)
     const [numOfItems, setnumOfItems] = useState(0)
     const [favoriteIds, setfavoriteIds] = useState(null)
+    let {UserToken, setUserToken} = useContext(TokenContext)
 
 
     function addToWishList(prodId) {
@@ -57,10 +59,10 @@ export default function WishContextProvider(props) {
 
     useEffect(() => {
         console.log(favoriteIds)
-        if (token) {
+        if (UserToken) {
             getUserWishListItems()
         }
-    }, [token])
+    }, [UserToken])
 
     useEffect(() => {
     console.log("Updated favoriteIds:", favoriteIds);
